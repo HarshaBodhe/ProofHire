@@ -1,0 +1,9 @@
+langgraph
+langchain
+langchain-groq
+requests
+python-dotenv
+streamlit
+supabase
+python-docx
+pypdf
