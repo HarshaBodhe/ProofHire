@@ -78,7 +78,86 @@ pip install langgraph langchain langchain-groq requests python-dotenv streamlit 
 ### 4. Set up API keys
 
 Copy `.env.example` to `.env` and fill in your keys:
+GROQ_API_KEY=your_groq_api_key_here
+GITHUB_TOKEN=your_github_token_here
+SUPABASE_URL=your_supabase_url_here
+SUPABASE_KEY=your_supabase_key_here
 
+**Where to get your keys:**
+- **Groq API key** — Free at [console.groq.com](https://console.groq.com)
+- **GitHub Token** — GitHub → Settings → Developer Settings → Personal Access Tokens
+- **Supabase** — Free at [supabase.com](https://supabase.com) → Settings → API
+
+### 5. Set up Supabase table
+
+Run this in Supabase SQL Editor:
+
+```sql
+CREATE TABLE job_applications (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT NOW(),
+    user_name TEXT,
+    user_email TEXT,
+    user_phone TEXT,
+    user_location TEXT,
+    user_linkedin TEXT,
+    github_username TEXT,
+    company_name TEXT,
+    role_title TEXT,
+    github_analysis TEXT,
+    cv_summary TEXT,
+    match_analysis TEXT,
+    cover_letter TEXT
+);
+
+ALTER TABLE job_applications ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow all operations" ON job_applications
+FOR ALL USING (true) WITH CHECK (true);
+```
+
+### 6. Run the app
+
+```bash
+.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+Open browser at `http://localhost:8501`
+
+---
+
+## 📁 Project Structure
+
+ProofHire/
+│
+├── app.py              # Streamlit web interface
+├── job_agent.py        # 4-agent LangGraph pipeline
+├── .env.example        # API key template
+├── .gitignore          # Excludes .env and .venv
+└── README.md           # This file
+
+---
+
+## 🎯 How To Use
+
+1. Go to **Generate Application**
+2. Enter your details and GitHub username
+3. Upload your CV (PDF or Word) or paste it
+4. Paste the job description
+5. Click **Generate My Application**
+6. Get your Fit Score, skill analysis and cover letter
+7. Download as Word (.docx) or Text (.txt)
+8. View all past applications in **My History**
+
+---
+
+## 🔒 Privacy & Security
+
+- API keys stored in `.env` — never committed to GitHub
+- GitHub data processed ephemerally — raw code not stored
+- Application data stored securely in Supabase with RLS enabled
+
+---
 
 ## 🌟 Author
 
@@ -92,3 +171,4 @@ MSc Data Science · University of Europe for Applied Sciences · Berlin
 ---
 
 *ProofHire v1.0 · April 2026 · Built with LangGraph + Groq + Supabase*
+
